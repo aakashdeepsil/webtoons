@@ -17,7 +17,7 @@ class SignUp extends StatelessWidget {
         padding: const EdgeInsets.all(24.0),
         children: [
           EmailAuth(
-            redirectTo: kIsWeb ? null : 'io.supabase.flutter://',
+            redirectTo: kIsWeb ? null : 'http://localhost:3000/',
             onSignInComplete: (response) {
               Navigator.of(context).pushReplacementNamed('/home');
             },

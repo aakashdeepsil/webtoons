@@ -299,8 +299,12 @@ class _EmailAuthState extends State<EmailAuth> {
                     final email = _emailController.text.trim();
                     await supabase.auth.resetPasswordForEmail(
                       email,
-                      redirectTo: widget.redirectTo,
+                      redirectTo: '${widget.redirectTo}update_password',
                     );
+                    if (context.mounted) {
+                      context.showSnackBar(
+                          'Password reset email sent to $email successfully');
+                    }
                     widget.onPasswordResetEmailSent?.call();
                   } on AuthException catch (error) {
                     widget.onError?.call(error);

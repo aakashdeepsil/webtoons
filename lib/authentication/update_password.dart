@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
-import '../constants.dart';
+import 'package:webtoons/constants.dart';
 
 class UpdatePassword extends StatelessWidget {
   const UpdatePassword({super.key});
