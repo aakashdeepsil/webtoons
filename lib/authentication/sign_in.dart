@@ -56,11 +56,8 @@ class SignUp extends StatelessWidget {
                   '1041085987882-jt7g00fbtaq13uckto4ti6nrvrunks9o.apps.googleusercontent.com',
             ),
             enableNativeAppleAuth: false,
-            socialButtonVariant: SocialButtonVariant.icon,
             socialProviders: const [
-              OAuthProvider.facebook,
               OAuthProvider.google,
-              OAuthProvider.twitter,
             ],
             onSuccess: (session) async {
               Navigator.of(context).pushReplacementNamed('/home');
