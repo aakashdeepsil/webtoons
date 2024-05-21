@@ -3,7 +3,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:infinite_carousel/infinite_carousel.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
+import 'package:webtoons/theme/theme_provider.dart';
 
 import 'constants.dart';
 
@@ -19,10 +22,12 @@ class _HomeState extends State<Home> {
   final bool _loop = true;
 
   // Scroll controller for carousel
-  late InfiniteScrollController _controller;
+  late InfiniteScrollController _mainController;
+  late InfiniteScrollController _topWebToonsController;
 
   // Maintain current index of carousel
-  int _selectedIndex = 0;
+  int _mainControllerselectedIndex = 0;
+  int _topWebToonsControllerselectedIndex = 0;
 
   // Width of each item
   double? _mainCarouselItemWidth;
@@ -34,20 +39,24 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _controller = InfiniteScrollController(initialItem: _selectedIndex);
+    _mainController =
+        InfiniteScrollController(initialItem: _mainControllerselectedIndex);
+    _topWebToonsController = InfiniteScrollController(
+      initialItem: _topWebToonsControllerselectedIndex,
+    );
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _mainCarouselItemWidth = screenWidth - 50;
+    _mainCarouselItemWidth = screenWidth;
     _topWebToonsCarouselItemWidth = screenWidth - 300;
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    _mainController.dispose();
   }
 
   List<String> kDemoImages = [
@@ -64,133 +73,145 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('Home'),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 200,
-            child: InfiniteCarousel.builder(
-              itemCount: kDemoImages.length,
-              itemExtent: _mainCarouselItemWidth ?? 50,
-              scrollBehavior: kIsWeb
-                  ? ScrollConfiguration.of(context).copyWith(
-                      dragDevices: {
-                        // Allows to swipe in web browsers
-                        PointerDeviceKind.touch,
-                        PointerDeviceKind.mouse,
+      appBar: appBar('LAYA'),
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 200,
+              child: InfiniteCarousel.builder(
+                itemCount: kDemoImages.length,
+                itemExtent: _mainCarouselItemWidth ?? 50,
+                scrollBehavior: kIsWeb
+                    ? ScrollConfiguration.of(context).copyWith(
+                        dragDevices: {
+                          // Allows to swipe in web browsers
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                        },
+                      )
+                    : null,
+                loop: _loop,
+                controller: _mainController,
+                onIndexChanged: (index) {
+                  if (_mainControllerselectedIndex != index) {
+                    setState(() {
+                      _mainControllerselectedIndex = index;
+                    });
+                  }
+                },
+                itemBuilder: (context, itemIndex, realIndex) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        _mainController.animateToItem(realIndex);
                       },
-                    )
-                  : null,
-              loop: _loop,
-              controller: _controller,
-              onIndexChanged: (index) {
-                if (_selectedIndex != index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                }
-              },
-              itemBuilder: (context, itemIndex, realIndex) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      _controller.animateToItem(realIndex);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        boxShadow: kElevationToShadow[2],
-                        image: DecorationImage(
-                          image: NetworkImage(kDemoImages[itemIndex]),
-                          fit: BoxFit.fill,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          boxShadow: kElevationToShadow[2],
+                          image: DecorationImage(
+                            image: NetworkImage(kDemoImages[itemIndex]),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Top WebToons',
-            style: Theme.of(context).textTheme.headline5,
-          ),
-          SizedBox(
-            height: 200,
-            child: InfiniteCarousel.builder(
-              itemCount: kDemoImages.length,
-              itemExtent: _topWebToonsCarouselItemWidth ?? 50,
-              scrollBehavior: kIsWeb
-                  ? ScrollConfiguration.of(context).copyWith(
-                      dragDevices: {
-                        // Allows to swipe in web browsers
-                        PointerDeviceKind.touch,
-                        PointerDeviceKind.mouse,
+            const SizedBox(height: 20),
+            const Text(
+              'Top WebToons',
+            ),
+            SizedBox(
+              height: 200,
+              child: InfiniteCarousel.builder(
+                itemCount: kDemoImages.length,
+                itemExtent: _topWebToonsCarouselItemWidth ?? 50,
+                scrollBehavior: kIsWeb
+                    ? ScrollConfiguration.of(context).copyWith(
+                        dragDevices: {
+                          // Allows to swipe in web browsers
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                        },
+                      )
+                    : null,
+                loop: _loop,
+                controller: _topWebToonsController,
+                onIndexChanged: (index) {
+                  if (_topWebToonsControllerselectedIndex != index) {
+                    setState(() {
+                      _topWebToonsControllerselectedIndex = index;
+                    });
+                  }
+                },
+                itemBuilder: (context, itemIndex, realIndex) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        _topWebToonsController.animateToItem(realIndex);
                       },
-                    )
-                  : null,
-              loop: _loop,
-              controller: _controller,
-              onIndexChanged: (index) {
-                if (_selectedIndex != index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                }
-              },
-              itemBuilder: (context, itemIndex, realIndex) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      _controller.animateToItem(realIndex);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Column(children: [
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              image: DecorationImage(
-                                image: NetworkImage(kDemoImages[itemIndex]),
-                                fit: BoxFit.fill,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Column(children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                image: DecorationImage(
+                                  image: NetworkImage(kDemoImages[itemIndex]),
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'WebToon Title',
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                      ]),
+                          const SizedBox(height: 10),
+                          const Text('WebToon Title'),
+                        ]),
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              Supabase.instance.client.auth.signOut();
-              Navigator.of(context).pushReplacementNamed('/');
-            },
-            child: const Text(
-              'Log Out',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+                  );
+                },
               ),
             ),
-          )
-        ],
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Supabase.instance.client.auth.signOut();
+                Navigator.of(context).pushReplacementNamed('/');
+              },
+              child: const Text(
+                'Log Out',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Provider.of<ThemeProvider>(context, listen: false)
+                    .toggleTheme();
+              },
+              child: const Text(
+                'Toggle Theme',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -199,31 +220,29 @@ class _HomeState extends State<Home> {
         ),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.teal,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(LucideIcons.home),
               label: 'Home',
               tooltip: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
+              icon: Icon(LucideIcons.search),
               label: 'Explore',
               tooltip: 'Explore',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.library_books),
-              label: 'Favorites',
-              tooltip: 'Favorites',
+              icon: Icon(LucideIcons.library),
+              label: 'Library',
+              tooltip: 'Library',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
+              icon: Icon(LucideIcons.userCircle),
               label: 'Profile',
               tooltip: 'Profile',
             ),
           ],
-          selectedItemColor: Colors.black,
-          unselectedItemColor: Colors.grey,
           showSelectedLabels: true,
           showUnselectedLabels: true,
         ),

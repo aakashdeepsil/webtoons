@@ -38,7 +38,7 @@ extension ShowSnackBar on BuildContext {
       ),
       backgroundColor: backgroundColor,
       action: SnackBarAction(
-        label: actionLabel ?? 'ok',
+        label: actionLabel ?? 'OK',
         onPressed: () {},
       ),
     ));
