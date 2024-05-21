@@ -1,6 +1,6 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:webtoons/constants.dart';
@@ -299,11 +299,12 @@ class _EmailAuthState extends State<EmailAuth> {
                     final email = _emailController.text.trim();
                     await supabase.auth.resetPasswordForEmail(
                       email,
-                      redirectTo: '${widget.redirectTo}update_password',
+                      redirectTo: '${widget.redirectTo}',
                     );
                     if (context.mounted) {
                       context.showSnackBar(
-                          'Password reset email sent to $email successfully');
+                        'Password reset email sent to $email successfully',
+                      );
                     }
                     widget.onPasswordResetEmailSent?.call();
                   } on AuthException catch (error) {

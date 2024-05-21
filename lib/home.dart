@@ -1,14 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_auth_ui/supabase_auth_ui.dart';
-import 'package:webtoons/theme/theme_provider.dart';
 
-import 'constants.dart';
+import 'package:supabase_auth_ui/supabase_auth_ui.dart';
+import 'package:webtoons/constants.dart';
+import 'package:webtoons/theme/theme_provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -35,6 +36,7 @@ class _HomeState extends State<Home> {
 
   // Get screen width of viewport.
   double get screenWidth => MediaQuery.of(context).size.width;
+  double get screenHeight => MediaQuery.of(context).size.height;
 
   @override
   void initState() {
@@ -50,7 +52,7 @@ class _HomeState extends State<Home> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _mainCarouselItemWidth = screenWidth;
-    _topWebToonsCarouselItemWidth = screenWidth - 300;
+    _topWebToonsCarouselItemWidth = screenWidth - 250;
   }
 
   @override
@@ -74,45 +76,45 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar('LAYA'),
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 200,
-              child: InfiniteCarousel.builder(
-                itemCount: kDemoImages.length,
-                itemExtent: _mainCarouselItemWidth ?? 50,
-                scrollBehavior: kIsWeb
-                    ? ScrollConfiguration.of(context).copyWith(
-                        dragDevices: {
-                          // Allows to swipe in web browsers
-                          PointerDeviceKind.touch,
-                          PointerDeviceKind.mouse,
-                        },
-                      )
-                    : null,
-                loop: _loop,
-                controller: _mainController,
-                onIndexChanged: (index) {
-                  if (_mainControllerselectedIndex != index) {
-                    setState(() {
-                      _mainControllerselectedIndex = index;
-                    });
-                  }
-                },
-                itemBuilder: (context, itemIndex, realIndex) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: GestureDetector(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: screenHeight * 0.25,
+                child: InfiniteCarousel.builder(
+                  center: false,
+                  velocityFactor: 0.75,
+                  itemCount: kDemoImages.length,
+                  itemExtent: _mainCarouselItemWidth ?? 50,
+                  scrollBehavior: kIsWeb
+                      ? ScrollConfiguration.of(context).copyWith(
+                          dragDevices: {
+                            // Allows to swipe in web browsers
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse,
+                          },
+                        )
+                      : null,
+                  loop: _loop,
+                  controller: _mainController,
+                  onIndexChanged: (index) {
+                    if (_mainControllerselectedIndex != index) {
+                      setState(() {
+                        _mainControllerselectedIndex = index;
+                      });
+                    }
+                  },
+                  itemBuilder: (context, itemIndex, realIndex) {
+                    return GestureDetector(
                       onTap: () {
                         _mainController.animateToItem(realIndex);
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
                           boxShadow: kElevationToShadow[2],
                           image: DecorationImage(
                             image: NetworkImage(kDemoImages[itemIndex]),
@@ -120,97 +122,255 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Top WebToons',
-            ),
-            SizedBox(
-              height: 200,
-              child: InfiniteCarousel.builder(
-                itemCount: kDemoImages.length,
-                itemExtent: _topWebToonsCarouselItemWidth ?? 50,
-                scrollBehavior: kIsWeb
-                    ? ScrollConfiguration.of(context).copyWith(
-                        dragDevices: {
-                          // Allows to swipe in web browsers
-                          PointerDeviceKind.touch,
-                          PointerDeviceKind.mouse,
+              SizedBox(height: screenHeight * 0.025),
+              Padding(
+                padding: EdgeInsets.only(left: screenWidth * 0.025),
+                child: Text(
+                  'Top WebToons',
+                  style: TextStyle(
+                    fontSize: screenHeight * 0.025,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: screenHeight * 0.2,
+                child: InfiniteCarousel.builder(
+                  center: false,
+                  velocityFactor: 0.75,
+                  itemCount: kDemoImages.length,
+                  itemExtent: _topWebToonsCarouselItemWidth ?? 50,
+                  scrollBehavior: kIsWeb
+                      ? ScrollConfiguration.of(context).copyWith(
+                          dragDevices: {
+                            // Allows to swipe in web browsers
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse,
+                          },
+                        )
+                      : null,
+                  loop: _loop,
+                  controller: _topWebToonsController,
+                  onIndexChanged: (index) {
+                    if (_topWebToonsControllerselectedIndex != index) {
+                      setState(() {
+                        _topWebToonsControllerselectedIndex = index;
+                      });
+                    }
+                  },
+                  itemBuilder: (context, itemIndex, realIndex) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.025,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          _topWebToonsController.animateToItem(realIndex);
                         },
-                      )
-                    : null,
-                loop: _loop,
-                controller: _topWebToonsController,
-                onIndexChanged: (index) {
-                  if (_topWebToonsControllerselectedIndex != index) {
-                    setState(() {
-                      _topWebToonsControllerselectedIndex = index;
-                    });
-                  }
-                },
-                itemBuilder: (context, itemIndex, realIndex) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        _topWebToonsController.animateToItem(realIndex);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Column(children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                image: DecorationImage(
-                                  image: NetworkImage(kDemoImages[itemIndex]),
-                                  fit: BoxFit.fill,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Column(children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: DecorationImage(
+                                    image: NetworkImage(kDemoImages[itemIndex]),
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                          const Text('WebToon Title'),
-                        ]),
+                            SizedBox(height: screenHeight * 0.01),
+                            Text(
+                              'WebToon Title',
+                              style: TextStyle(fontSize: screenHeight * 0.02),
+                            ),
+                          ]),
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.025),
+              Padding(
+                padding: EdgeInsets.only(left: screenWidth * 0.025),
+                child: Text(
+                  'Continue Watching',
+                  style: TextStyle(
+                    fontSize: screenHeight * 0.025,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: screenHeight * 0.2,
+                child: InfiniteCarousel.builder(
+                  center: false,
+                  velocityFactor: 0.75,
+                  itemCount: kDemoImages.length,
+                  itemExtent: _topWebToonsCarouselItemWidth ?? 50,
+                  scrollBehavior: kIsWeb
+                      ? ScrollConfiguration.of(context).copyWith(
+                          dragDevices: {
+                            // Allows to swipe in web browsers
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse,
+                          },
+                        )
+                      : null,
+                  loop: _loop,
+                  controller: _topWebToonsController,
+                  onIndexChanged: (index) {
+                    if (_topWebToonsControllerselectedIndex != index) {
+                      setState(() {
+                        _topWebToonsControllerselectedIndex = index;
+                      });
+                    }
+                  },
+                  itemBuilder: (context, itemIndex, realIndex) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          _topWebToonsController.animateToItem(realIndex);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Column(children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: DecorationImage(
+                                    image: NetworkImage(kDemoImages[itemIndex]),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: screenHeight * 0.01),
+                            Text(
+                              'WebToon Title',
+                              style: TextStyle(fontSize: screenHeight * 0.02),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.025),
+              Padding(
+                padding: EdgeInsets.only(left: screenWidth * 0.025),
+                child: Text(
+                  'Continue Reading',
+                  style: TextStyle(
+                    fontSize: screenHeight * 0.025,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: screenHeight * 0.2,
+                child: InfiniteCarousel.builder(
+                  center: false,
+                  velocityFactor: 0.75,
+                  itemCount: kDemoImages.length,
+                  itemExtent: _topWebToonsCarouselItemWidth ?? 50,
+                  scrollBehavior: kIsWeb
+                      ? ScrollConfiguration.of(context).copyWith(
+                          dragDevices: {
+                            // Allows to swipe in web browsers
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse,
+                          },
+                        )
+                      : null,
+                  loop: _loop,
+                  controller: _topWebToonsController,
+                  onIndexChanged: (index) {
+                    if (_topWebToonsControllerselectedIndex != index) {
+                      setState(() {
+                        _topWebToonsControllerselectedIndex = index;
+                      });
+                    }
+                  },
+                  itemBuilder: (context, itemIndex, realIndex) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.025,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          _topWebToonsController.animateToItem(realIndex);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Column(children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: DecorationImage(
+                                    image: NetworkImage(kDemoImages[itemIndex]),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: screenHeight * 0.01),
+                            Text(
+                              'WebToon Title',
+                              style: TextStyle(fontSize: screenHeight * 0.02),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Supabase.instance.client.auth.signOut();
+                  context.go('/');
                 },
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Supabase.instance.client.auth.signOut();
-                Navigator.of(context).pushReplacementNamed('/');
-              },
-              child: const Text(
-                'Log Out',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                child: const Text(
+                  'Log Out',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Provider.of<ThemeProvider>(context, listen: false)
-                    .toggleTheme();
-              },
-              child: const Text(
-                'Toggle Theme',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Provider.of<ThemeProvider>(context, listen: false)
+                      .toggleTheme();
+                },
+                child: const Text(
+                  'Toggle Theme',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: ClipRRect(
@@ -245,6 +405,24 @@ class _HomeState extends State<Home> {
           ],
           showSelectedLabels: true,
           showUnselectedLabels: true,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
+          unselectedItemColor: Theme.of(context).colorScheme.onSurface,
+          onTap: (value) {
+            switch (value) {
+              case 0:
+                context.go('/home');
+                break;
+              case 1:
+                break;
+              case 2:
+                break;
+              case 3:
+                context.go('/profile');
+                break;
+              default:
+                break;
+            }
+          },
         ),
       ),
     );
