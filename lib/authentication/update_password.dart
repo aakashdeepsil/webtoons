@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:go_router/go_router.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
 import 'package:webtoons/constants.dart';
@@ -16,10 +17,9 @@ class UpdatePassword extends StatelessWidget {
         child: Column(
           children: [
             SupaResetPassword(
-              accessToken:
-                  Supabase.instance.client.auth.currentSession!.accessToken,
+              accessToken: supabase.auth.currentSession?.accessToken,
               onSuccess: (response) {
-                Navigator.of(context).pushReplacementNamed('/home');
+                context.go('/home');
               },
             ),
             TextButton(
@@ -27,9 +27,7 @@ class UpdatePassword extends StatelessWidget {
                 'Take me back to Sign Up',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/');
-              },
+              onPressed: () => context.go('/'),
             ),
           ],
         ),

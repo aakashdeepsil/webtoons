@@ -1,14 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:go_router/go_router.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
 import 'package:webtoons/authentication/email_authentication.dart';
 import 'package:webtoons/constants.dart';
 
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
+  @override
+  State<SignUp> createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,12 +23,10 @@ class SignUp extends StatelessWidget {
         padding: const EdgeInsets.all(24.0),
         children: [
           EmailAuth(
-            redirectTo: kIsWeb ? null : 'http://localhost:3000/',
-            onSignInComplete: (response) {
-              Navigator.of(context).pushReplacementNamed('/home');
-            },
+            redirectTo: kIsWeb ? null : 'yourScheme://yourDomain.com',
+            onSignInComplete: (response) {},
             onSignUpComplete: (response) async {
-              Navigator.of(context).pushReplacementNamed('/home');
+              context.go('/home');
 
               await supabase.from('USER').insert({
                 'email_address': response.user!.email,
@@ -56,11 +60,9 @@ class SignUp extends StatelessWidget {
                   '1041085987882-jt7g00fbtaq13uckto4ti6nrvrunks9o.apps.googleusercontent.com',
             ),
             enableNativeAppleAuth: false,
-            socialProviders: const [
-              OAuthProvider.google,
-            ],
+            socialProviders: const [OAuthProvider.google],
             onSuccess: (session) async {
-              Navigator.of(context).pushReplacementNamed('/home');
+              context.go('/home');
 
               final emailAddress = session.user.email;
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -38,7 +39,7 @@ extension ShowSnackBar on BuildContext {
       ),
       backgroundColor: backgroundColor,
       action: SnackBarAction(
-        label: actionLabel ?? 'ok',
+        label: actionLabel ?? 'OK',
         onPressed: () {},
       ),
     ));
