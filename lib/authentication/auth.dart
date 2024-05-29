@@ -7,14 +7,14 @@ import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:webtoons/authentication/email_authentication.dart';
 import 'package:webtoons/constants.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({super.key});
+class AuthenticationPage extends StatefulWidget {
+  const AuthenticationPage({super.key});
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<AuthenticationPage> createState() => _AuthenticationPageState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _AuthenticationPageState extends State<AuthenticationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,15 +23,14 @@ class _SignUpState extends State<SignUp> {
         padding: const EdgeInsets.all(24.0),
         children: [
           EmailAuth(
-            redirectTo: kIsWeb ? null : 'yourScheme://yourDomain.com',
+            // redirectTo: kIsWeb ? null : 'yourScheme://yourDomain.com',
+            redirectTo: kIsWeb ? null : 'io.supabase.webtoons://',
             onSignInComplete: (response) {},
             onSignUpComplete: (response) async {
               context.go('/home');
 
-              await supabase.from('USER').insert({
+              await supabase.from('profiles').insert({
                 'email_address': response.user!.email,
-                'first_name': '',
-                'last_name': '',
                 'username': response.user!.userMetadata?['username'],
               });
             },
@@ -67,15 +66,13 @@ class _SignUpState extends State<SignUp> {
               final emailAddress = session.user.email;
 
               final checkUser = await supabase
-                  .from('USER')
+                  .from('profiles')
                   .select()
                   .eq('email_address', emailAddress!);
 
               if (checkUser.isEmpty) {
-                await supabase.from('USER').insert({
+                await supabase.from('profiles').insert({
                   'email_address': session.user.email,
-                  'first_name': '',
-                  'last_name': '',
                   'username': session.user.email,
                 });
               }

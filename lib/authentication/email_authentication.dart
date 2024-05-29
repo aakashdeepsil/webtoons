@@ -223,7 +223,7 @@ class _EmailAuthState extends State<EmailAuth> {
                       widget.onSignInComplete.call(response);
                     } else {
                       final checkUsername = await supabase
-                          .from('USER')
+                          .from('profiles')
                           .select()
                           .eq('username', _dataControllers.values.first.text);
 
