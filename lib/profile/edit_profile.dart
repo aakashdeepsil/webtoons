@@ -268,7 +268,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
             ),
-      bottomNavigationBar: const MyBottomNavigationBar(),
+      bottomNavigationBar: const MyBottomNavigationBar(index: 4),
     );
   }
 }

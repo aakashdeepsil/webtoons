@@ -117,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : DefaultTabController(
-              length: 3,
+              length: 2,
               child: NestedScrollView(
                   headerSliverBuilder: (context, _) {
                     return [
@@ -144,13 +144,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         indicatorWeight: 1,
                         tabs: const [
                           Tab(
-                            text: "Text Content",
+                            text: "Content",
                           ),
                           Tab(
-                            text: "Visual Content",
-                          ),
-                          Tab(
-                            text: "Reviews",
+                            text: "Posts",
                           ),
                         ],
                       ),
@@ -173,21 +170,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 );
                               },
                             ),
-                            ListView.builder(
-                              itemCount: 10,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  title: Text("Saved $index"),
-                                );
-                              },
-                            ),
                           ],
                         ),
                       ),
                     ],
                   )),
             ),
-      bottomNavigationBar: const MyBottomNavigationBar(),
+      bottomNavigationBar: const MyBottomNavigationBar(index: 4),
     );
   }
 }

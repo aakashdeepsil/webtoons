@@ -3,11 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-class MyBottomNavigationBar extends StatelessWidget {
+class MyBottomNavigationBar extends StatefulWidget {
   const MyBottomNavigationBar({
     super.key,
+    required this.index,
   });
 
+  final int index;
+
+  @override
+  State<MyBottomNavigationBar> createState() => _MyBottomNavigationBarState();
+}
+
+class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -17,7 +25,7 @@ class MyBottomNavigationBar extends StatelessWidget {
       ),
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: 3,
+        currentIndex: widget.index,
         backgroundColor: Theme.of(context).colorScheme.surface,
         items: const [
           BottomNavigationBarItem(
@@ -29,6 +37,11 @@ class MyBottomNavigationBar extends StatelessWidget {
             icon: Icon(LucideIcons.search),
             label: 'Explore',
             tooltip: 'Explore',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people_alt_outlined),
+            label: 'Socials',
+            tooltip: 'Socials',
           ),
           BottomNavigationBarItem(
             icon: Icon(LucideIcons.library),
@@ -55,6 +68,8 @@ class MyBottomNavigationBar extends StatelessWidget {
             case 2:
               break;
             case 3:
+              break;
+            case 4:
               context.go('/profile');
               break;
             default:
