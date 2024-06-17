@@ -5,7 +5,8 @@ ThemeData lightMode = ThemeData(
   colorScheme: const ColorScheme.light(
     surface: Colors.white,
     brightness: Brightness.light,
-    primary: Colors.deepOrangeAccent,
+    primary: Color.fromRGBO(67, 176, 42, 1),
+    secondary: Color.fromRGBO(206, 159, 81, 1),
   ),
 );
 
@@ -14,6 +15,7 @@ ThemeData darkMode = ThemeData(
   colorScheme: const ColorScheme.dark(
     surface: Color.fromRGBO(15, 15, 15, 1),
     brightness: Brightness.dark,
-    primary: Colors.deepOrangeAccent,
+    primary: Color.fromRGBO(206, 159, 81, 1),
+    secondary: Color.fromRGBO(67, 176, 42, 1),
   ),
 );

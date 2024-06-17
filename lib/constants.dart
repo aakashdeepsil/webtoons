@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+// Get the Supabase client
 final supabase = Supabase.instance.client;
+
+// Get the currently signed in user from Supabase
+Future<User?> getSignedInUser() async => supabase.auth.currentUser;
 
 AppBar appBar(String title) => AppBar(
       title: Text(title),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:webtoons/components/my_bottom_navigation_bar.dart';
 import 'package:webtoons/constants.dart';
+import 'package:webtoons/profile/profile_header.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,66 +14,169 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  double get screenWidth => MediaQuery.of(context).size.width;
+  double get screenHeight => MediaQuery.of(context).size.height;
+
+  var _loading = true;
+
+  String avatarUrl = '';
+  String bio = '';
+  String firstName = '';
+  String lastName = '';
+  String username = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _getProfile();
+  }
+
+  /// Called once a user id is received within `onAuthenticated()`
+  Future<void> _getProfile() async {
+    setState(() {
+      _loading = true;
+    });
+
+    try {
+      final userId = supabase.auth.currentSession!.user.id;
+      final data =
+          await supabase.from('profiles').select().eq('id', userId).single();
+
+      avatarUrl = (data['avatar_url'] ?? '') as String;
+      bio = (data['bio'] ?? '') as String;
+      firstName = (data['first_name'] ?? '') as String;
+      lastName = (data['last_name'] ?? '') as String;
+      username = (data['username'] ?? '') as String;
+    } on PostgrestException catch (error) {
+      if (mounted) {
+        SnackBar(
+          content: Text(error.message),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        SnackBar(
+          content: const Text('Unexpected error occurred. Try again.'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('LAYA'),
-      body: const Center(
-        child: Text('Welcome to your profile!'),
-      ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(15.0),
-          topRight: Radius.circular(15.0),
-        ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: 3,
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(LucideIcons.home),
-              label: 'Home',
-              tooltip: 'Home',
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.grey[200] ?? Colors.white,
+              ),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(LucideIcons.search),
-              label: 'Explore',
-              tooltip: 'Explore',
+          ),
+          child: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.white,
+            title: Text(
+              username,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(LucideIcons.library),
-              label: 'Library',
-              tooltip: 'Library',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(LucideIcons.userCircle),
-              label: 'Profile',
-              tooltip: 'Profile',
-            ),
-          ],
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          selectedItemColor: Theme.of(context).colorScheme.primary,
-          unselectedItemColor: Theme.of(context).colorScheme.onSurface,
-          onTap: (value) {
-            switch (value) {
-              case 0:
-                context.go('/home');
-                break;
-              case 1:
-                break;
-              case 2:
-                break;
-              case 3:
-                context.go('/profile');
-                break;
-              default:
-                break;
-            }
-          },
+            centerTitle: false,
+            elevation: 0,
+            actions: [
+              IconButton(
+                icon: const Icon(
+                  Icons.add_box_outlined,
+                  color: Colors.black,
+                ),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.menu,
+                  color: Colors.black,
+                ),
+                onPressed: () {},
+              )
+            ],
+          ),
         ),
       ),
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : DefaultTabController(
+              length: 2,
+              child: NestedScrollView(
+                  headerSliverBuilder: (context, _) {
+                    return [
+                      SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            ProfileHeader(
+                              firstName: firstName,
+                              lastName: lastName,
+                              username: username,
+                              bio: bio,
+                              avatarUrl: avatarUrl,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ];
+                  },
+                  body: Column(
+                    children: [
+                      TabBar(
+                        unselectedLabelColor: Colors.grey[400],
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicatorWeight: 1,
+                        tabs: const [
+                          Tab(
+                            text: "Content",
+                          ),
+                          Tab(
+                            text: "Posts",
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: TabBarView(
+                          children: [
+                            ListView.builder(
+                              itemCount: 10,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Text("Post $index"),
+                                );
+                              },
+                            ),
+                            ListView.builder(
+                              itemCount: 10,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Text("Saved $index"),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
+      bottomNavigationBar: const MyBottomNavigationBar(index: 4),
     );
   }
 }

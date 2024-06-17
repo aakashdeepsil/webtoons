@@ -61,11 +61,15 @@
 	<dict>
 		<key>CFBundleURLSchemes</key>
 		<array>
-		<string>yourScheme</string>
+			<string>io.supabase.webtoons</string>
 		</array>
-		<key>CFBundleURLName</key>
-		<string>yourIdentifier</string>
 	</dict>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Webtoons</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Webtoons</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Webtoons</string>
 </dict>
 </plist>
