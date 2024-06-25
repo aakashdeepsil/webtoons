@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:go_router/go_router.dart';
+
 import 'package:lucide_icons/lucide_icons.dart';
 
 class Post extends StatefulWidget {
-  const Post({super.key});
+  final String? postId;
+  const Post({super.key, required this.postId});
 
   @override
   State<Post> createState() => _PostState();
@@ -113,15 +116,31 @@ class _PostState extends State<Post> {
                     const Text(
                       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec odio nec nunc.",
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: screenHeight * 0.01,
-                      ),
-                      child: Image.network(
-                        'https://picsum.photos/250?image=2',
-                        height: screenHeight * 0.3,
-                        width: screenWidth,
-                        fit: BoxFit.cover,
+                    Container(
+                      padding: EdgeInsets.all(screenHeight * 0.005),
+                      height: screenHeight * 0.3,
+                      child: GridView.builder(
+                        itemCount: 4,
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () {
+                              context.go(
+                                '/socials/post/${widget.postId}/media/${index + 1}',
+                              );
+                            },
+                            child: Image.network(
+                              'https://picsum.photos/250?image=${index + 1}',
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
                       ),
                     ),
                     Padding(
