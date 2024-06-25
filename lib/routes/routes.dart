@@ -7,6 +7,8 @@ import 'package:webtoons/authentication/update_password.dart';
 import 'package:webtoons/home.dart';
 import 'package:webtoons/profile/edit_profile.dart';
 import 'package:webtoons/profile/profile.dart';
+import 'package:webtoons/socials/post_page.dart';
+import 'package:webtoons/socials/socials_homepage.dart';
 
 List<RouteBase> routes = [
   GoRoute(
@@ -20,6 +22,21 @@ List<RouteBase> routes = [
     builder: (BuildContext context, GoRouterState state) {
       return const Home();
     },
+  ),
+  GoRoute(
+    path: 'socials',
+    builder: (BuildContext context, GoRouterState state) {
+      return const SocialsHomepage();
+    },
+    routes: <RouteBase>[
+      GoRoute(
+        path: 'post/:postId',
+        builder: (BuildContext context, GoRouterState state) {
+          final String? postId = state.pathParameters['postId'];
+          return PostPage(postId: postId);
+        },
+      ),
+    ],
   ),
   GoRoute(
     path: 'update_password',
