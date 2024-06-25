@@ -7,6 +7,7 @@ import 'package:webtoons/authentication/update_password.dart';
 import 'package:webtoons/home.dart';
 import 'package:webtoons/profile/edit_profile.dart';
 import 'package:webtoons/profile/profile.dart';
+import 'package:webtoons/socials/post_media_view_page.dart';
 import 'package:webtoons/socials/post_page.dart';
 import 'package:webtoons/socials/socials_homepage.dart';
 
@@ -34,6 +35,14 @@ List<RouteBase> routes = [
         builder: (BuildContext context, GoRouterState state) {
           final String? postId = state.pathParameters['postId'];
           return PostPage(postId: postId);
+        },
+      ),
+      GoRoute(
+        path: 'post/:postId/media/:mediaId',
+        builder: (BuildContext context, GoRouterState state) {
+          final String? postId = state.pathParameters['postId'];
+          final String? mediaId = state.pathParameters['mediaId'];
+          return PostMediaViewPage(postId: postId, mediaId: mediaId);
         },
       ),
     ],

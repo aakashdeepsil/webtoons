@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtoons/socials/post.dart';
+import 'package:webtoons/socials/components/post.dart';
 
 class PostPage extends StatefulWidget {
   final String? postId;
@@ -18,7 +18,7 @@ class _PostPageState extends State<PostPage> {
       appBar: AppBar(
         title: const Text('Post Page'),
       ),
-      body: Post(),
+      body: Post(postId: widget.postId),
     );
   }
 }

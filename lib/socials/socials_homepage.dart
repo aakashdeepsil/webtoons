@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:webtoons/components/my_bottom_navigation_bar.dart';
 import 'package:webtoons/constants.dart';
-import 'package:webtoons/socials/post.dart';
+import 'package:webtoons/socials/components/post.dart';
 
 class SocialsHomepage extends StatefulWidget {
   const SocialsHomepage({super.key});
@@ -45,20 +47,20 @@ class _SocialsHomepageState extends State<SocialsHomepage> {
                   child: TabBarView(
                     children: [
                       ListView.builder(
-                        itemCount: 10,
+                        itemCount: 1,
                         itemBuilder: (context, index) {
-                          return GestureDetector(
+                          return InkWell(
                             onTap: () {
                               context.go('/socials/post/$index');
                             },
-                            child: const Post(),
+                            child: Post(postId: index.toString()),
                           );
                         },
                       ),
                       ListView.builder(
                         itemCount: 10,
                         itemBuilder: (context, index) {
-                          return const Post();
+                          return Post(postId: index.toString());
                         },
                       ),
                     ],
@@ -68,6 +70,10 @@ class _SocialsHomepageState extends State<SocialsHomepage> {
             )),
       ),
       bottomNavigationBar: const MyBottomNavigationBar(index: 2),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(LucideIcons.pencil),
+      ),
     );
   }
 }
