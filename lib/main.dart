@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
       theme: Provider.of<ThemeProvider>(context).themeData,
-      title: 'WebToons',
+      title: 'LAYA',
     );
   }
 }

@@ -66,6 +66,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
             case 1:
               break;
             case 2:
+              context.go('/socials');
               break;
             case 3:
               break;
