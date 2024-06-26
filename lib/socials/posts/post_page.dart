@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtoons/socials/components/post.dart';
+import 'package:webtoons/components/my_bottom_navigation_bar.dart';
+import 'package:webtoons/constants.dart';
+import 'package:webtoons/socials/posts/post.dart';
 
 class PostPage extends StatefulWidget {
   final String? postId;
@@ -15,10 +17,17 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Post Page'),
+      appBar: appBar('LAYA', automaticallyImplyLeading: true),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Post(postId: widget.postId),
+            ],
+          ),
+        ),
       ),
-      body: Post(postId: widget.postId),
+      bottomNavigationBar: const MyBottomNavigationBar(index: 2),
     );
   }
 }

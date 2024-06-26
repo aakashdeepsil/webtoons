@@ -5,7 +5,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:webtoons/components/my_bottom_navigation_bar.dart';
 import 'package:webtoons/constants.dart';
-import 'package:webtoons/socials/components/post.dart';
+import 'package:webtoons/socials/posts/post.dart';
 
 class SocialsHomepage extends StatefulWidget {
   const SocialsHomepage({super.key});
