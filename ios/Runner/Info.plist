@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Webtoons</string>
+	<string>LAYA</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -66,10 +66,10 @@
 	</dict>
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Webtoons</string>
+	<string>LAYA</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Webtoons</string>
+	<string>LAYA</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Webtoons</string>
+	<string>LAYA</string>
 </dict>
 </plist>
