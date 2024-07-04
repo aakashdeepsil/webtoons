@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class Post extends StatefulWidget {
@@ -127,7 +128,7 @@ class _PostState extends State<Post> {
                 ),
               ),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () => context.go('/socials/post/${widget.postId}'),
                 style: OutlinedButton.styleFrom(
                   minimumSize: Size(screenWidth * 0.2, screenHeight * 0.03),
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),

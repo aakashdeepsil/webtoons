@@ -7,6 +7,7 @@ import 'package:webtoons/authentication/update_password.dart';
 import 'package:webtoons/home.dart';
 import 'package:webtoons/profile/edit_profile.dart';
 import 'package:webtoons/profile/profile.dart';
+import 'package:webtoons/socials/comments/add_comment_page.dart';
 import 'package:webtoons/socials/posts/post_media_view_page.dart';
 import 'package:webtoons/socials/posts/post_page.dart';
 import 'package:webtoons/socials/socials_homepage.dart';
@@ -43,6 +44,13 @@ List<RouteBase> routes = [
           final String? postId = state.pathParameters['postId'];
           final String? mediaId = state.pathParameters['mediaId'];
           return PostMediaViewPage(postId: postId, mediaId: mediaId);
+        },
+      ),
+      GoRoute(
+        path: 'post/:postId/comments/add_comment',
+        builder: (BuildContext context, GoRouterState state) {
+          final String? postId = state.pathParameters['postId'];
+          return AddCommentPage(postId: postId);
         },
       ),
     ],
