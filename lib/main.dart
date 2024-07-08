@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:webtoons/landing_page.dart';
 import 'package:webtoons/routes/routes.dart';
-import 'package:webtoons/splash.dart';
 import 'package:webtoons/theme/theme_provider.dart';
 
 Future<void> main() async {
@@ -33,7 +33,7 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) =>
-          const SplashPage(),
+          const LandingPage(),
       routes: routes,
     ),
   ],

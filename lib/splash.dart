@@ -28,7 +28,7 @@ class _SplashPageState extends State<SplashPage> {
     if (session != null) {
       context.go('/home');
     } else {
-      context.go('/sign_in');
+      context.go('/');
     }
   }
 
