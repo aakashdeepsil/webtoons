@@ -7,6 +7,7 @@ import 'package:webtoons/authentication/update_password.dart';
 import 'package:webtoons/home.dart';
 import 'package:webtoons/profile/edit_profile.dart';
 import 'package:webtoons/profile/profile.dart';
+import 'package:webtoons/profile/profile_settings_page.dart';
 import 'package:webtoons/socials/comments/add_comment_page.dart';
 import 'package:webtoons/socials/posts/post_media_view_page.dart';
 import 'package:webtoons/socials/posts/post_page.dart';
@@ -56,12 +57,6 @@ List<RouteBase> routes = [
     ],
   ),
   GoRoute(
-    path: 'update_password',
-    builder: (BuildContext context, GoRouterState state) {
-      return const UpdatePassword();
-    },
-  ),
-  GoRoute(
     path: 'profile',
     builder: (BuildContext context, GoRouterState state) {
       return const ProfilePage();
@@ -71,6 +66,18 @@ List<RouteBase> routes = [
         path: 'edit_profile',
         builder: (BuildContext context, GoRouterState state) {
           return const EditProfilePage();
+        },
+      ),
+      GoRoute(
+        path: 'settings',
+        builder: (BuildContext context, GoRouterState state) {
+          return const ProfileSettingsPage();
+        },
+      ),
+      GoRoute(
+        path: 'update_password',
+        builder: (BuildContext context, GoRouterState state) {
+          return const UpdatePassword();
         },
       ),
     ],

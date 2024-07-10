@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:webtoons/components/my_bottom_navigation_bar.dart';
@@ -74,44 +75,25 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: Colors.grey[200] ?? Colors.white,
-              ),
-            ),
+        preferredSize: Size.fromHeight(screenHeight * 0.05),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+            username,
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
-            title: Text(
-              username,
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
+          centerTitle: false,
+          elevation: 0,
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.add_box_outlined),
             ),
-            centerTitle: false,
-            elevation: 0,
-            actions: [
-              IconButton(
-                icon: const Icon(
-                  Icons.add_box_outlined,
-                  color: Colors.black,
-                ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.menu,
-                  color: Colors.black,
-                ),
-                onPressed: () {},
-              )
-            ],
-          ),
+            IconButton(
+              onPressed: () => context.go("/profile/settings"),
+              icon: const Icon(Icons.menu),
+            )
+          ],
         ),
       ),
       body: _loading
